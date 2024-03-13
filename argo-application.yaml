@@ -1,0 +1,19 @@
+kind: Application
+metadata:
+  name: helm-guestbook
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+  source:
+    path: helm-guestbook
+    repoURL: https://github.com/arbabkhalil/argocd-kustomized-helm.git
+    targetRevision: main
+    plugin:
+    # helm:
+    #   valueFiles:
+    #   - values.yaml

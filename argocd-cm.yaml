@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cmp-plugin
+  namespace: default
+data:
+  plugin.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: cmp-plugin
+    spec:
+      version: v1.0
+      init:
+        command: [sh, -c, 'echo "Initializing..."']
+      generate:
+        command: [sh, -c, 'helm template . > temp.yaml && kustomize build']
+      discover:
+        fileName: "./Chart.yaml"
+
+# apiVersion: v1
+# data:
+#   admin.enabled: "true"
+#   application.instanceLabelKey: argocd.argoproj.io/instance
+#   exec.enabled: "false"
+#   server.rbac.log.enforce.enable: "false"
+#   timeout.hard.reconciliation: 0s
+#   timeout.reconciliation: 180s
+#   url: https://argocd.example.com
+#   configManagementPlugins: |
+#     - name: kustomize-build-with-helm
+#       generate:
+#         command: [ "sh", "-c" ]
+#         args: [ "kustomize build --enable-helm" ]
+#     - name: helm-template-with-kustomize
+#       generate:
+#         command: [ "sh", "-c" ]
+#         args: [ "helm template ." ]
+# kind: ConfigMap
+# metadata:
+#   annotations:
+#     meta.helm.sh/release-name: arogcd
+#     meta.helm.sh/release-namespace: default
+#   labels:
+#     app.kubernetes.io/component: server
+#     app.kubernetes.io/instance: arogcd
+#     app.kubernetes.io/managed-by: Helm
+#     app.kubernetes.io/name: argocd-cm
+#     app.kubernetes.io/part-of: argocd
+#     app.kubernetes.io/version: v2.10.1
+#     helm.sh/chart: argo-cd-6.2.3
+#   name: argocd-cm
+#   namespace: default
